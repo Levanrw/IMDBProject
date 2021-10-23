@@ -15,28 +15,20 @@ namespace IMDB.Service.Services
         {
             try
             {
-                var fromAddress = new MailAddress("imdbspace@gmail.com", "From Name");
-                var toAddress = new MailAddress("shanavalevani@gmail.com", "To Name");
-                const string fromPassword = "shanava123";
-                const string subject = "Subject";
-                const string body1 = "Body";
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress("imdbspace@gmail.com");
+                    mail.To.Add("shanavalevani@gmail.com");
+                    mail.Subject = "Hello World";
+                    mail.Body = "<h1>Hello123</h1>";
+                    mail.IsBodyHtml = true;
 
-                var smtp = new SmtpClient
-                {
-                    Host = "smtp.gmail.com",
-                    Port = 25,
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
-                };
-                using (var message = new MailMessage(fromAddress, toAddress)
-                {
-                    Subject = subject,
-                    Body = body
-                })
-                {
-                    smtp.Send(message);
+                    using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                    {
+                        smtp.Credentials = new NetworkCredential("imdbspace@gmail.com", "shanava123");
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
                 }
 
 
