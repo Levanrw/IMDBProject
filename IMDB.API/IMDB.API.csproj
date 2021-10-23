@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.7.25" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IMDB.DAL\IMDB.DAL.csproj" />
+    <ProjectReference Include="..\IMDB.Models\IMDB.Models.csproj" />
+    <ProjectReference Include="..\IMDB.Service\IMDB.Service.csproj" />
+  </ItemGroup>
+
+</Project>
