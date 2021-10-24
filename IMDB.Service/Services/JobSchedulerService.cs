@@ -42,13 +42,14 @@ namespace IMDB.Service.Services
                     var row = watchlist.Where(w => w.Watched == false).OrderByDescending(t => t.IMDBRating).FirstOrDefault();
                     movie = new WatchListResponseModel(row.Id,row.MovieId, row.Title, row.IMDBRating, row.Watched == true ? "Watched" : "Not watched");
                     DateTime? NotificationDate = _notificationsRepository.GetLastNotificationDate(movie.Id);
-                    if (NotificationDate ==Convert.ToDateTime("1/1/0001 12:00:00 AM") || (DateTime.Now - NotificationDate.Value).TotalDays > 30)
+                    if (NotificationDate == Convert.ToDateTime("1/1/0001 12:00:00 AM") || (DateTime.Now - NotificationDate.Value).TotalDays > 30)
                     {
                         Poster = await _IMDBService.GetPoster(movie.MovieId);
                         MovieDescription = await _IMDBService.GetWikipediaData(movie.MovieId);
+                        MoviesDetailInfo Info = new MoviesDetailInfo(movie.Id, movie.Title, movie.IMDBRating, Poster, MovieDescription, userId);
+                        return Info;
                     }
-                    MoviesDetailInfo Info = new MoviesDetailInfo(movie.Id, movie.Title, movie.IMDBRating, Poster, MovieDescription,userId);
-                    return Info;
+                    else return null;
 
                 }
                 else return null;
