@@ -3,6 +3,7 @@ using IMDB.DAL.Interface;
 using IMDB.DAL.Repositories;
 using IMDB.Models.ResponseModels;
 using IMDB.Service.Interface;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +18,15 @@ namespace IMDB.Service.Services
         private readonly INotificationsRepository _notificationsRepository;
         private readonly IIMDBService _IMDBService;
         private readonly IEmailService _emailService;
+        private readonly IConfiguration _config;
 
-        public JobSchedulerService(IWatchListRepository watchListRepository, INotificationsRepository notificationsRepository, IIMDBService iIMDBService, IEmailService emailService)
+        public JobSchedulerService(IWatchListRepository watchListRepository, INotificationsRepository notificationsRepository, IIMDBService iIMDBService, IEmailService emailService, IConfiguration config)
         {
             _watchListRepository = watchListRepository;
             _notificationsRepository = notificationsRepository;
             _IMDBService = iIMDBService;
             _emailService = emailService;
+            _config = config;
         }
         public async Task<MoviesDetailInfo> GetMoviesDetail(int userId)
         {
@@ -39,7 +42,7 @@ namespace IMDB.Service.Services
                     var row = watchlist.Where(w => w.Watched == false).OrderBy(t => t.IMDBRating).FirstOrDefault();
                     movie = new WatchListResponseModel(row.Id,row.MovieId, row.Title, row.IMDBRating, row.Watched == true ? "Watched" : "Not watched");
                     DateTime? NotificationDate = _notificationsRepository.GetLastNotificationDate(movie.Id);
-                    if (NotificationDate != null && (DateTime.Now - NotificationDate.Value).TotalDays > 30)
+                   // if (NotificationDate != null && (DateTime.Now - NotificationDate.Value).TotalDays > 30)
                     {
                         Poster = await _IMDBService.GetPoster(movie.MovieId);
                         MovieDescription = await _IMDBService.GetWikipediaData(movie.MovieId);
@@ -58,7 +61,7 @@ namespace IMDB.Service.Services
             if (MoviesDetail != null)
             {
                 string BodyText = _emailService.GenerateEmailBody(MoviesDetail);
-                _emailService.SendMail("shanavalevani@gmail.com", BodyText);
+                _emailService.SendMail(_config["EmailConfiguration:To:Email"], BodyText);
                 Notifications row = new Notifications(MoviesDetail.UserId, MoviesDetail.Id, DateTime.Now);
                await _notificationsRepository.AddNotification(row);
             }

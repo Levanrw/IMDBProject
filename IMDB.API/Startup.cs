@@ -34,6 +34,7 @@ namespace IMDB.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllers().AddFluentValidation();
             services.AddTransient<IValidator<SearchMovieModel>, SearchMovieModelValidator>();
             services.AddTransient<IValidator<WatchListRequest>, WatchListRequestValidator>();
@@ -44,12 +45,9 @@ namespace IMDB.API
             services.AddSingleton<INotificationsRepository, NotificationsRepository>();
             services.AddSingleton<IJobSchedulerService, JobSchedulerService>();
             services.AddSingleton<IEmailService, EmailService>();
-            //services.AddHangfire(config =>
-            //{
-                //config.UseSqlServerStorage(@"Data Source = 62.171.168.156; Initial Catalog = IMDBDB; Persist Security Info = True; User ID = pabuser; Password = u6JVj6lAU9nLJh1FaDpr");
-                services.AddHangfire(x => x.UseSqlServerStorage(@"Data Source = 62.171.168.156; Initial Catalog = IMDBDB; Persist Security Info = True; User ID = pabuser; Password = u6JVj6lAU9nLJh1FaDpr"));
 
-           // });
+            // Implimentation  Hangfire
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration["ConnectionStrings:IMDBConnection"]));         
             services.AddHangfireServer();
 
             services.AddSwaggerGen(c =>

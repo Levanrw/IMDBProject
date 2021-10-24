@@ -23,9 +23,9 @@ namespace IMDB.API.Controllers
         [HttpPost("SendMail")]
         public void SendMail()
         {
-          // await _IobSchedulerService.SendNotification();
+           _IobSchedulerService.SendNotification();
 
-            RecurringJob.AddOrUpdate(() => _IobSchedulerService.SendNotification(), Cron.Minutely());
+           // RecurringJob.AddOrUpdate(() => _IobSchedulerService.SendNotification(), Cron.Minutely());
 
         }
     }

@@ -24,6 +24,7 @@ namespace IMDB.DAL.Entities
         public string Description { get; set; }
         public decimal? IMDBRating { get; set; }
         public bool Watched { get; set; }
+        public DateTime Sysdate { get; set; } = DateTime.Now;
 
     }
 }
