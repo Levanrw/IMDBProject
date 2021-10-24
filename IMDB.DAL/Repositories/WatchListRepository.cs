@@ -42,7 +42,7 @@ namespace IMDB.DAL.Repositories
                 var row = _context.WatchList.Where(s => s.UserId == userId).ToList();
                 foreach (var item in row)
                 {
-                    list.Add(new WatchList(item.UserId, item.MovieId, item.Title,item.Description, item.IMDBRating, item.Watched ));
+                    list.Add(new WatchList(item.Id, item.UserId, item.MovieId, item.Title,item.Description, item.IMDBRating, item.Watched ));
 
                 }
                 return list;

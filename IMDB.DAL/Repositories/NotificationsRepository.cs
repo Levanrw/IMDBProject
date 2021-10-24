@@ -19,5 +19,14 @@ namespace IMDB.DAL.Repositories
             }
             return  date;
         }
+
+        public async Task AddNotification(Notifications notification)
+        {
+            using (var _context = new IMDBDBContext())
+            {
+                await _context.Notifications.AddAsync(notification);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

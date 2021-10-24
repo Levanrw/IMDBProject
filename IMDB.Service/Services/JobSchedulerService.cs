@@ -1,4 +1,5 @@
-﻿using IMDB.DAL.Interface;
+﻿using IMDB.DAL.Entities;
+using IMDB.DAL.Interface;
 using IMDB.DAL.Repositories;
 using IMDB.Models.ResponseModels;
 using IMDB.Service.Interface;
@@ -14,13 +15,15 @@ namespace IMDB.Service.Services
     {
         private readonly IWatchListRepository _watchListRepository;
         private readonly INotificationsRepository _notificationsRepository;
-        private readonly IIMDBService _iIMDBService;
+        private readonly IIMDBService _IMDBService;
+        private readonly IEmailService _emailService;
 
-        public JobSchedulerService(IWatchListRepository watchListRepository, INotificationsRepository notificationsRepository, IIMDBService iIMDBService)
+        public JobSchedulerService(IWatchListRepository watchListRepository, INotificationsRepository notificationsRepository, IIMDBService iIMDBService, IEmailService emailService)
         {
             _watchListRepository = watchListRepository;
             _notificationsRepository = notificationsRepository;
-            _iIMDBService = iIMDBService;
+            _IMDBService = iIMDBService;
+            _emailService = emailService;
         }
         public async Task<MoviesDetailInfo> GetMoviesDetail(int userId)
         {
@@ -38,16 +41,28 @@ namespace IMDB.Service.Services
                     DateTime? NotificationDate = _notificationsRepository.GetLastNotificationDate(movie.Id);
                     if (NotificationDate != null && (DateTime.Now - NotificationDate.Value).TotalDays > 30)
                     {
-                        Poster = await _iIMDBService.GetPoster(movie.MovieId);
-                        MovieDescription = await _iIMDBService.GetWikipediaData(movie.MovieId);
+                        Poster = await _IMDBService.GetPoster(movie.MovieId);
+                        MovieDescription = await _IMDBService.GetWikipediaData(movie.MovieId);
                     }
-                    MoviesDetailInfo Info = new MoviesDetailInfo(movie.Title, movie.IMDBRating, Poster, MovieDescription);
+                    MoviesDetailInfo Info = new MoviesDetailInfo(movie.Id, movie.Title, movie.IMDBRating, Poster, MovieDescription,userId);
                     return Info;
 
                 }
                 else return null;
             }
             else return null;
+        }
+        public async Task SendNotification()
+        {
+            var MoviesDetail =await GetMoviesDetail(100);            
+            if (MoviesDetail != null)
+            {
+                string BodyText = _emailService.GenerateEmailBody(MoviesDetail);
+                _emailService.SendMail("shanavalevani@gmail.com", BodyText);
+                Notifications row = new Notifications(MoviesDetail.UserId, MoviesDetail.Id, DateTime.Now);
+               await _notificationsRepository.AddNotification(row);
+            }
+
         }
     }
 }

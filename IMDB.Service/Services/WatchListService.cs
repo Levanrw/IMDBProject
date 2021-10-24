@@ -23,7 +23,7 @@ namespace IMDB.Service.Services
         public async Task AddWatchList(WatchListRequest request)
         {
             decimal Rating = await _iMDBService.GetMovieRating(request.MovieId);
-            var wachlist = new DAL.Entities.WatchList(100, request.MovieId, request.Title, request.Description, Rating, false);
+            var wachlist = new DAL.Entities.WatchList(0,100, request.MovieId, request.Title, request.Description, Rating, false);
             await _watchListRepository.AddWatchList(wachlist);
         }
         public async Task MarckAsWatched(int Id)

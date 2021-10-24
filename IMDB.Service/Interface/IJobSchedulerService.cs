@@ -9,5 +9,6 @@ namespace IMDB.Service.Interface
    public interface IJobSchedulerService
     {
         public Task<MoviesDetailInfo> GetMoviesDetail(int userId);
+        public Task SendNotification();
     }
 }

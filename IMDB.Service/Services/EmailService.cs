@@ -1,4 +1,5 @@
 ﻿
+using IMDB.Models.ResponseModels;
 using IMDB.Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,13 @@ namespace IMDB.Service.Services
         {
             try
             {
+              
                 using (MailMessage mail = new MailMessage())
                 {
                     mail.From = new MailAddress("imdbspace@gmail.com");
-                    mail.To.Add("shanavalevani@gmail.com");
-                    mail.Subject = "Hello World";
-                    mail.Body = "<h1>Hello123</h1>";
+                    mail.To.Add(emailAddress);
+                    mail.Subject = "Movie Suggest";
+                    mail.Body = body;
                     mail.IsBodyHtml = true;
 
                     using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
@@ -31,24 +33,24 @@ namespace IMDB.Service.Services
                     }
                 }
 
-
-                //SmtpClient client = new SmtpClient("smtp.gmail.com", 5354);
-                //client.EnableSsl = true;
-                //client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                //client.UseDefaultCredentials = false;
-                //client.Credentials = new NetworkCredential("imdbspace@gmail.com", "shanava123");
-                //MailMessage msgobj = new MailMessage();
-                //msgobj.To.Add("shanavalevani@gmail.com");
-                //msgobj.From = new MailAddress("imdbspace@gmail.com");
-                //msgobj.Subject = "CreditInfo Result";
-                //msgobj.Body = "Bodyy";
-                //client.Send(msgobj);
-
             }
             catch (Exception ex)
             {
 
             }
         }
+
+        public string GenerateEmailBody(MoviesDetailInfo body)
+        {
+            string BodyString = $"<html> <head> <title>Suggest Movie</title></head>" +
+                 $"<body><table><tr><td><b>{body.Title}</b></td></tr>" +
+                 $"<br/><br/><tr><td><b>IMDB Rating:   <b/> <b style='color:red'>{body.Rating}</b></td></tr>" +
+                 $"<br/><br/><br/><br/><br/><br/><tr><td>{body.Description}</td></tr>" +
+                 $"<br/><br/><tr><td><img src={body.Poster} width='400px' height='550px'></td></tr>" +
+                 $"</head></html>";
+            return BodyString;
+
+        }
+
     }
 }

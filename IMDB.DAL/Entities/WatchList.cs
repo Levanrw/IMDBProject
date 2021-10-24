@@ -6,8 +6,9 @@ namespace IMDB.DAL.Entities
 {
    public class WatchList
     {
-        public WatchList(int userId, string movieId, string title, string description, decimal? iMDBRating, bool watched)
+        public WatchList(int id,int userId, string movieId, string title, string description, decimal? iMDBRating, bool watched)
         {
+            Id = id;
             UserId = userId;
             MovieId = movieId;
             Title = title;

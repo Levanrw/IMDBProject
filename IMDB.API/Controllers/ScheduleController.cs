@@ -1,4 +1,5 @@
-﻿using IMDB.Service.Interface;
+﻿using Hangfire;
+using IMDB.Service.Interface;
 using IMDB.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,14 +13,20 @@ namespace IMDB.API.Controllers
     [Route("[controller]")]
     public class ScheduleController :  ControllerBase
     {
-        
-        [HttpGet("SendMail")]
+        private readonly IJobSchedulerService _IobSchedulerService;
+
+        public ScheduleController(IJobSchedulerService iobSchedulerService)
+        {
+            _IobSchedulerService = iobSchedulerService;
+        }
+
+        [HttpPost("SendMail")]
         public async Task SendMail()
         {
-            EmailService serv = new EmailService();
-            serv.SendMail("", "");
-            //WatchListService watchList = new WatchListService(null, null);
-            //watchList.test();
+           await _IobSchedulerService.SendNotification();
+
+           // RecurringJob.AddOrUpdate(() => _IobSchedulerService.SendNotification(), Cron.Minutely());
+
         }
     }
 }

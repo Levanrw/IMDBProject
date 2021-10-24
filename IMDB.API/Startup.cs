@@ -38,12 +38,12 @@ namespace IMDB.API
             services.AddSingleton<INotificationsRepository, NotificationsRepository>();
             services.AddSingleton<IJobSchedulerService, JobSchedulerService>();
             services.AddSingleton<IEmailService, EmailService>();
-            services.AddHangfire(config =>
-            {
-                config.UseSqlServerStorage(@"Data Source = 62.171.168.156; Initial Catalog = IMDBDB; Persist Security Info = True; User ID = pabuser; Password = u6JVj6lAU9nLJh1FaDpr");
+            //services.AddHangfire(config =>
+            //{
+                //config.UseSqlServerStorage(@"Data Source = 62.171.168.156; Initial Catalog = IMDBDB; Persist Security Info = True; User ID = pabuser; Password = u6JVj6lAU9nLJh1FaDpr");
+                services.AddHangfire(x => x.UseSqlServerStorage(@"Data Source = 62.171.168.156; Initial Catalog = IMDBDB; Persist Security Info = True; User ID = pabuser; Password = u6JVj6lAU9nLJh1FaDpr"));
 
-
-            });
+           // });
             services.AddHangfireServer();
 
             services.AddControllers();
@@ -59,10 +59,11 @@ namespace IMDB.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            JobStorage.Current = new SqlServerStorage(@"Data Source = 62.171.168.156; Initial Catalog = IMDBDB; Persist Security Info = True; User ID = pabuser; Password = u6JVj6lAU9nLJh1FaDpr");
-            ScheduleController schedule = new ScheduleController();
-            RecurringJob.AddOrUpdate("weekly", () => schedule.SendMail(), Cron.Weekly(DayOfWeek.Saturday, 16, 53), TimeZoneInfo.FindSystemTimeZoneById("Georgian Standard Time"));
-            app.UseHangfireDashboard();
+            //JobStorage.Current = new SqlServerStorage(@"Data Source = 62.171.168.156; Initial Catalog = IMDBDB; Persist Security Info = True; User ID = pabuser; Password = u6JVj6lAU9nLJh1FaDpr");
+            //ScheduleController schedule = new ScheduleController();
+            
+            //RecurringJob.AddOrUpdate("weekly", () => jobSchedulerService.SendNotification(), Cron.Weekly(DayOfWeek.Saturday, 16, 53), TimeZoneInfo.FindSystemTimeZoneById("Georgian Standard Time"));
+            //app.UseHangfireDashboard();
 
             if (env.IsDevelopment())
             {
