@@ -24,8 +24,8 @@ namespace IMDB.Service.Services
         {
             try
             {
-                decimal Rating = await _iMDBService.GetMovieRating(request.MovieId);
-                var wachlist = new DAL.Entities.WatchList(0, 100, request.MovieId, request.Title, request.Description, Rating, false);
+                var  movie = await _iMDBService.GetMovieInfo(request.MovieId);
+                var wachlist = new DAL.Entities.WatchList(0, 100, request.MovieId, movie.Title, movie.Description, movie.Rating, false);
                 await _watchListRepository.AddWatchList(wachlist);
             }
             catch (Exception ex)

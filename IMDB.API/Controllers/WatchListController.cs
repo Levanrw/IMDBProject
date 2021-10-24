@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace IMDB.API.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
     /// <summary>
     /// 
     /// </summary>
+    [ApiController]
+    [Route("[controller]")]   
     public class WatchListController : ControllerBase
     {
         private readonly IWatchList _watchList;

@@ -24,7 +24,6 @@ namespace IMDB.Service.Services
         {
             try
             {
-                var r = _config["ConnectionStrings:IMDBConnection"];
 
                 using (MailMessage mail = new MailMessage())
                 {

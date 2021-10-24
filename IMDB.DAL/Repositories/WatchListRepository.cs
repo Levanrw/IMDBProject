@@ -16,11 +16,18 @@ namespace IMDB.DAL.Repositories
 
         public async Task AddWatchList(WatchList watchList)
         {
-            using (var _context = new IMDBDBContext())
+            try
             {
+                using (var _context = new IMDBDBContext())
+                {
 
-                await _context.WatchList.AddAsync(watchList);
-                await _context.SaveChangesAsync();
+                    await _context.WatchList.AddAsync(watchList);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
         public async Task MarkAsWatched(int Id)

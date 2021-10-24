@@ -9,19 +9,21 @@ using System.Threading.Tasks;
 
 namespace IMDB.API.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
     /// <summary>
     /// 
     /// </summary>
-    public class ScheduleController :  ControllerBase
+    [ApiController]
+
+    [Route("[controller]")]
+   
+    public class NotificationController :  ControllerBase
     {
         private readonly IJobSchedulerService _IobSchedulerService;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="iobSchedulerService"></param>
-        public ScheduleController(IJobSchedulerService iobSchedulerService)
+        public NotificationController(IJobSchedulerService iobSchedulerService)
         {
             _IobSchedulerService = iobSchedulerService;
         }
@@ -31,9 +33,9 @@ namespace IMDB.API.Controllers
         [HttpPost("SendMail")]
         public void SendMail()
         {
-          // _IobSchedulerService.SendNotification();
+          _IobSchedulerService.SendNotification();
 
-            RecurringJob.AddOrUpdate(() => _IobSchedulerService.SendNotification(), Cron.Minutely());
+          //  RecurringJob.AddOrUpdate(() => _IobSchedulerService.SendNotification(), Cron.Weekly(DayOfWeek.Friday,19,30));
 
         }
     }

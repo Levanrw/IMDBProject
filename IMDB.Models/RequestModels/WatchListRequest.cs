@@ -8,11 +8,7 @@ namespace IMDB.Models.RequestModels
         /// ფილმი
         /// </summary>
         public string MovieId { get; set; }
-        /// <summary>
-        /// აღწერა
-        /// </summary>
-        public string Description { get; set; }
-        public string Title { get; set; }
+       
     }
     public class WatchListRequestValidator : AbstractValidator<WatchListRequest>
     {

@@ -1,6 +1,7 @@
 ﻿using IMDB.Models;
 using IMDB.Models.Exceptoins;
 using IMDB.Models.RequestModels;
+using IMDB.Models.ResponseModels;
 using IMDB.Service.Interface;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -39,7 +40,7 @@ namespace IMDB.Service.Services
             }
         }
 
-        public async Task<decimal> GetMovieRating(string movieId)
+        public async Task<MovieInfo> GetMovieInfo(string movieId)
         {
             try
             {
@@ -49,14 +50,22 @@ namespace IMDB.Service.Services
                 if (obj != null)
                 {
                     var Rating = obj["imDbRating"].ToString();
-                    return Rating == null ? 0 : Convert.ToDecimal(Rating);
+                    string Title = obj["title"].ToString();
+                    string Description = obj["plot"].ToString();
+                    decimal? ParsedRating = 0;
+                    if (Rating!=null && Rating!="" )
+                    {
+                        ParsedRating =Convert.ToDecimal(Rating);
+                    }
+                    var movie = new MovieInfo(ParsedRating, Title, Description);
+                    return movie;
                 }
                 else
-                    return 0;
+                    return new MovieInfo();
             }
             catch (Exception ex)
             {
-                return 0;
+                return new MovieInfo();
             }
         }
         public async Task<string> GetPoster(string movieId)
