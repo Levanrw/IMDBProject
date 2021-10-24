@@ -4,7 +4,13 @@ namespace IMDB.Models.RequestModels
 {
    public class WatchListRequest
     {
+        /// <summary>
+        /// ფილმი
+        /// </summary>
         public string MovieId { get; set; }
+        /// <summary>
+        /// აღწერა
+        /// </summary>
         public string Description { get; set; }
         public string Title { get; set; }
     }

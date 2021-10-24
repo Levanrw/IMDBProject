@@ -3,9 +3,18 @@ using IMDB.Models.Eenums;
 
 namespace IMDB.Models.RequestModels
 {
-   public class SearchMovieModel
-    {       
+    /// <summary>
+/// Search movie model
+/// </summary>
+    public class SearchMovieModel
+    {
+        /// <summary>
+    /// Movie Name
+    /// </summary>
         public string MovieName { get; set; }
+        /// <summary>
+        /// Movie language
+        /// </summary>
         public Language Lang { get; set; }
 
     }

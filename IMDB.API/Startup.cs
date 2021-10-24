@@ -18,7 +18,9 @@ using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace IMDB.API
 {
@@ -52,10 +54,16 @@ namespace IMDB.API
 
             services.AddSwaggerGen(c =>
             {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+                c.EnableAnnotations();
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "IMDB.API", Version = "v1" });
                 c.SchemaFilter<EnumSchemaFilter>();
+                //var filePath = Path.Combine(System.AppContext.BaseDirectory, "MyApi.xml");
+                //c.IncludeXmlComments(filePath);
             });
-
+           
         }
 
 
@@ -71,7 +79,10 @@ namespace IMDB.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
+                app.UseSwagger(c =>
+                {
+                    c.RouteTemplate = "swagger/{documentName}/swagger.json";
+                });
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "IMDB.API v1"));
             }
 
