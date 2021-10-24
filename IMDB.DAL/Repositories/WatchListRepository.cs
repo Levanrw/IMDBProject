@@ -1,5 +1,6 @@
 ﻿using IMDB.DAL.Entities;
 using IMDB.DAL.Interface;
+using IMDB.Models.Exceptoins;
 using IMDB.Models.RequestModels;
 using IMDB.Models.ResponseModels;
 using System;
@@ -24,29 +25,48 @@ namespace IMDB.DAL.Repositories
         }
         public async Task MarkAsWatched(int Id)
         {
-            using (var _context = new IMDBDBContext())
+            try
             {
-                var row = _context.WatchList.FirstOrDefault(item => item.Id == Id);
-                if (row != null)
+                using (var _context = new IMDBDBContext())
                 {
-                    row.Watched = true;
-                    await _context.SaveChangesAsync();
+                    var row = _context.WatchList.FirstOrDefault(item => item.Id == Id);
+                    if (row == null)
+                    {
+                        throw new RowNotFoundException();
+                    }
+                    if (row != null)
+                    {
+                        row.Watched = true;
+                        await _context.SaveChangesAsync();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
         public async Task<IEnumerable<WatchList>> GetWatchList(int userId)
         {
-            List<WatchList> list = new List<WatchList>();
-            using (var _context = new IMDBDBContext())
+            try
             {
-                var row = _context.WatchList.Where(s => s.UserId == userId).ToList();
-                foreach (var item in row)
+                List<WatchList> list = new List<WatchList>();
+                using (var _context = new IMDBDBContext())
                 {
-                    list.Add(new WatchList(item.Id, item.UserId, item.MovieId, item.Title,item.Description, item.IMDBRating, item.Watched ));
+                    var row = _context.WatchList.Where(s => s.UserId == userId).ToList();
+                    foreach (var item in row)
+                    {
+                        list.Add(new WatchList(item.Id, item.UserId, item.MovieId, item.Title, item.Description, item.IMDBRating, item.Watched));
 
+                    }
+                    return list;
                 }
-                return list;
             }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
     }
 }

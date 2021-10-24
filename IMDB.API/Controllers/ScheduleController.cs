@@ -21,11 +21,11 @@ namespace IMDB.API.Controllers
         }
 
         [HttpPost("SendMail")]
-        public async Task SendMail()
+        public void SendMail()
         {
-           await _IobSchedulerService.SendNotification();
+          // await _IobSchedulerService.SendNotification();
 
-           // RecurringJob.AddOrUpdate(() => _IobSchedulerService.SendNotification(), Cron.Minutely());
+            RecurringJob.AddOrUpdate(() => _IobSchedulerService.SendNotification(), Cron.Minutely());
 
         }
     }

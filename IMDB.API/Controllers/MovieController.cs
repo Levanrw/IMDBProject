@@ -10,11 +10,11 @@ namespace IMDB.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class IMDBController : ControllerBase
+    public class MovieController : ControllerBase
     {
         private readonly IIMDBService _IMDBService;
 
-        public IMDBController(IIMDBService iMDBService)
+        public MovieController(IIMDBService iMDBService)
         {
             _IMDBService = iMDBService;
         }
@@ -23,10 +23,6 @@ namespace IMDB.API.Controllers
         {
             return Ok(await _IMDBService.SearchMovie(request));
         }
-        [HttpGet("GetPoster")]
-        public async Task<IActionResult> Getposter(string MovieId)
-        {
-            return Ok(await _IMDBService.GetPoster(MovieId));
-        }
+       
     }
 }

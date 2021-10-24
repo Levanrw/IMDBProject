@@ -9,6 +9,7 @@ namespace IMDB.Models.Eenums
     {
         Default=EN,
         EN =1,
-        RU =2
+        GE = 2,
+        RU = 3
     }
 }

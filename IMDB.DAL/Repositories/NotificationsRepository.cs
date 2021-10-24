@@ -8,24 +8,38 @@ using System.Threading.Tasks;
 
 namespace IMDB.DAL.Repositories
 {
-  public  class NotificationsRepository: INotificationsRepository
+    public class NotificationsRepository : INotificationsRepository
     {
-        public  DateTime? GetLastNotificationDate(int watchListId)
+        public DateTime? GetLastNotificationDate(int watchListId)
         {
-            DateTime? date;
-            using (var _context = new IMDBDBContext())
+            try
             {
-               date =  _context.Notifications.Where(s => s.WatchListId == watchListId).Select(t=>t.NotificationDate).FirstOrDefault();
+                DateTime? date;
+                using (var _context = new IMDBDBContext())
+                {
+                    date = _context.Notifications.Where(s => s.WatchListId == watchListId).Select(t => t.NotificationDate).FirstOrDefault();
+                }
+                return date;
             }
-            return  date;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task AddNotification(Notifications notification)
         {
-            using (var _context = new IMDBDBContext())
+            try
             {
-                await _context.Notifications.AddAsync(notification);
-                await _context.SaveChangesAsync();
+                using (var _context = new IMDBDBContext())
+                {
+                    await _context.Notifications.AddAsync(notification);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }

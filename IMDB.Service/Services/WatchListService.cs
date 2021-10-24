@@ -22,9 +22,16 @@ namespace IMDB.Service.Services
         }
         public async Task AddWatchList(WatchListRequest request)
         {
-            decimal Rating = await _iMDBService.GetMovieRating(request.MovieId);
-            var wachlist = new DAL.Entities.WatchList(0,100, request.MovieId, request.Title, request.Description, Rating, false);
-            await _watchListRepository.AddWatchList(wachlist);
+            try
+            {
+                decimal Rating = await _iMDBService.GetMovieRating(request.MovieId);
+                var wachlist = new DAL.Entities.WatchList(0, 100, request.MovieId, request.Title, request.Description, Rating, false);
+                await _watchListRepository.AddWatchList(wachlist);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
         public async Task MarckAsWatched(int Id)
         {
@@ -32,6 +39,7 @@ namespace IMDB.Service.Services
         }
         public async Task<IEnumerable<WatchListResponseModel>> GetWatchList(int userId)
         {
+           
            var watchlist= await _watchListRepository.GetWatchList(userId);
             List<WatchListResponseModel> list = new List<WatchListResponseModel>();
             foreach (var item in watchlist)
@@ -42,12 +50,6 @@ namespace IMDB.Service.Services
             return list;
         }
 
-        public void test()
-        {
-            // RecurringJob.AddOrUpdate(() => MarckAsWatched(2), "44 2 * * Saturday");
-            //RecurringJob.AddOrUpdate(() => MarckAsWatched(2), "30 19 * * sun");
-            Console.WriteLine("Shemovidaa bijoooo");
-
-        }
+      
     }
 }

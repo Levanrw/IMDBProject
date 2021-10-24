@@ -1,8 +1,11 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Hangfire;
 using Hangfire.SqlServer;
 using IMDB.API.Controllers;
 using IMDB.DAL.Interface;
 using IMDB.DAL.Repositories;
+using IMDB.Models.RequestModels;
 using IMDB.Service;
 using IMDB.Service.Interface;
 using IMDB.Service.Services;
@@ -31,6 +34,9 @@ namespace IMDB.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers().AddFluentValidation();
+            services.AddTransient<IValidator<SearchMovieModel>, SearchMovieModelValidator>();
+            services.AddTransient<IValidator<WatchListRequest>, WatchListRequestValidator>();
             services.AddSingleton<IIMDBService, IMDBService>();
             services.AddSingleton<IExternalServiceCaller, ExternalServiceCaller>();
             services.AddSingleton<IWatchListRepository, WatchListRepository>();
@@ -46,7 +52,6 @@ namespace IMDB.API
            // });
             services.AddHangfireServer();
 
-            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "IMDB.API", Version = "v1" });

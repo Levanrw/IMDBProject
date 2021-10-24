@@ -12,6 +12,5 @@ namespace IMDB.Service.Interface
         public Task AddWatchList(WatchListRequest request);
         public Task MarckAsWatched(int Id);
         public Task<IEnumerable<WatchListResponseModel>> GetWatchList(int userId);
-        public void test();
     }
 }
