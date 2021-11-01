@@ -35,7 +35,7 @@ namespace IMDB.API.Controllers
         {
           _IobSchedulerService.SendNotification();
 
-          //  RecurringJob.AddOrUpdate(() => _IobSchedulerService.SendNotification(), Cron.Weekly(DayOfWeek.Friday,19,30));
+           RecurringJob.AddOrUpdate(() => _IobSchedulerService.SendNotification(), Cron.Weekly(DayOfWeek.Friday,19,30));
 
         }
     }
